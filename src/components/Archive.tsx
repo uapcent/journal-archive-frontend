@@ -1,0 +1,83 @@
+import { FormEvent, useState } from "react";
+import Terminal from "./Terminal";
+
+function Archive() {
+  const [date, setDate] = useState("");
+  const [entry, setEntry] = useState<string | null>(null);
+  const [searched, setSearched] = useState(false);
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    setSearched(true);
+
+    // Temporary fake entry
+    if (date === "2025-06-14") {
+      setEntry(
+        "I woke up relatively early today.\n\n" +
+        "The weather was surprisingly nice. " +
+        "I spent most of the morning doing absolutely nothing."
+      );
+    } else {
+      setEntry(null);
+    }
+  };
+
+  return (
+    <Terminal>
+      <div className="archive">
+        <div className="terminal-line">
+          ACCESS GRANTED
+        </div>
+
+        <div className="terminal-line">
+          JOURNAL ARCHIVE SYSTEM
+        </div>
+
+        <br />
+
+        <div className="terminal-line">
+          AVAILABLE ENTRIES: 3
+        </div>
+
+        <br />
+
+        <form onSubmit={handleSubmit}>
+          <label>
+            ENTER DATE:
+            <input
+              autoFocus
+              type="date"
+              value={date}
+              onChange={(event) => setDate(event.target.value)}
+            />
+          </label>
+
+          <button type="submit">
+            [ SEARCH ARCHIVE ]
+          </button>
+        </form>
+
+        {searched && (
+          <div className="search-result">
+            {entry ? (
+              <>
+                <div className="terminal-line">
+                  ENTRY FOUND
+                </div>
+
+                <pre>{entry}</pre>
+              </>
+            ) : (
+              <div className="terminal-line">
+                ERROR: NO ENTRY FOUND FOR {date}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </Terminal>
+  );
+}
+
+export default Archive;
