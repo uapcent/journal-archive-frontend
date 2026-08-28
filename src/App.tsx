@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import Login from "./components/Login";
 import Archive from "./components/Archive";
+import BootSequence from "./components/boot/BootSequence";
+import Login from "./components/Login";
 import "./App.css";
 
 type Screen = "boot" | "login" | "archive";
@@ -8,109 +9,58 @@ type Screen = "boot" | "login" | "archive";
 function App() {
   const [screen, setScreen] = useState<Screen>("boot");
 
+  console.log("APP RENDER - screen =", screen);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setScreen("login");
-    }, 5000);
+    console.log("APP SCREEN CHANGED ->", screen);
+  }, [screen]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  const changeScreen = (nextScreen: Screen) => {
+    console.log(
+      `SCREEN TRANSITION: ${screen} -> ${nextScreen}`,
+    );
 
-  const handleLogin = () => {
-    setScreen("archive");
+    setScreen(nextScreen);
   };
 
-  return (
-    <main className="app">
-      {screen === "boot" && <BootSequence />}
-      {screen === "login" && <Login onLogin={handleLogin} />}
-      {screen === "archive" && <Archive />}
-    </main>
-  );
-}
+  switch (screen) {
+    case "boot":
+      console.log("RENDERING BOOT");
 
-function BootSequence() {
-  const messages = [
-    "JOURNAL ARCHIVE SYSTEM v1.0",
-    "--------------------------------",
-    "INITIALIZING SYSTEM...",
-    "MEMORY CHECK ................. OK",
-    "ARCHIVE INDEX ................ OK",
-    "DATABASE CONNECTION .......... OK",
-    "SECURITY MODULE .............. OK",
-    "LOADING JOURNAL DATABASE...... OK",
-    "--------------------------------",
-    "SYSTEM READY.",
-    "",
-    "IDENTIFICATION REQUIRED.",
-  ];
+      return (
+        <main className="app">
+          <BootSequence
+            onComplete={() => {
+              console.log("BOOT COMPLETE -> LOGIN");
+              changeScreen("login");
+            }}
+          />
+        </main>
+      );
 
-  const [visibleMessages, setVisibleMessages] = useState<string[]>([]);
-  const [progress, setProgress] = useState(0);
+    case "login":
+      console.log("RENDERING LOGIN");
 
-  useEffect(() => {
-    let messageIndex = 0;
+      return (
+        <main className="app">
+          <Login
+            onLogin={() => {
+              console.log("LOGIN SUBMITTED -> ARCHIVE");
+              changeScreen("archive");
+            }}
+          />
+        </main>
+      );
 
-    const messageTimer = setInterval(() => {
-      if (messageIndex >= messages.length) {
-        clearInterval(messageTimer);
-        return;
-      }
+    case "archive":
+      console.log("RENDERING ARCHIVE");
 
-      setVisibleMessages((current) => [
-        ...current,
-        messages[messageIndex],
-      ]);
-
-      messageIndex++;
-    }, 300);
-
-    return () => clearInterval(messageTimer);
-  }, []);
-
-  useEffect(() => {
-    const progressTimer = setInterval(() => {
-      setProgress((current) => {
-        if (current >= 100) {
-          clearInterval(progressTimer);
-          return 100;
-        }
-
-        return current + 2;
-      });
-    }, 40);
-
-    return () => clearInterval(progressTimer);
-  }, []);
-
-  return (
-    <div className="terminal boot-terminal">
-      <div className="terminal-content">
-        {visibleMessages.map((message, index) => (
-          <div className="boot-line" key={index}>
-            {message || "\u00A0"}
-          </div>
-        ))}
-
-        {progress < 100 && (
-          <div className="progress-container">
-            <div className="progress-bar">
-              {"█".repeat(Math.floor(progress / 2))}
-              {"░".repeat(50 - Math.floor(progress / 2))}
-            </div>
-
-            <div>{progress}%</div>
-          </div>
-        )}
-
-        {progress === 100 && (
-          <div className="cursor-line">
-            <span>_</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+      return (
+        <main className="app">
+          <Archive />
+        </main>
+      );
+  }
 }
 
 export default App;

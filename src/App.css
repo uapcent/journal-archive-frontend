@@ -311,3 +311,105 @@ pre {
   font-family: inherit;
   line-height: 1.6;
 }
+
+.boot-sequence {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.boot-line {
+  white-space: pre-wrap;
+}
+
+.boot-line-success {
+  color: #39ff14;
+}
+
+.boot-line-warning {
+  color: #dfff00;
+}
+
+.boot-line-error {
+  color: #ff3333;
+}
+
+.boot-line-noise {
+  color: #888;
+}
+
+.boot-prompt {
+  margin-top: 30px;
+
+  display: flex;
+  gap: 10px;
+
+  font-weight: bold;
+}
+
+.cursor {
+  animation: cursor-blink 0.8s steps(1) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+
+  margin-left: 2px;
+
+  animation: cursor-blink 0.7s steps(1) infinite;
+}
+
+.boot-line {
+  min-height: 1.6em;
+  white-space: pre-wrap;
+}
+
+.boot-prompt {
+  margin-top: 30px;
+
+  display: flex;
+  gap: 10px;
+
+  font-weight: bold;
+}
+
+.cursor {
+  animation: cursor-blink 0.7s steps(1) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.terminal button:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    text-shadow: none;
+    box-shadow: none;
+    filter: none;
+}
+
+.terminal button:disabled:hover {
+    opacity: 0.25;
+    text-shadow: none;
+    box-shadow: none;
+}
