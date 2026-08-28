@@ -1,63 +1,61 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Terminal from "./Terminal";
 
 type LoginProps = {
-  onLogin: () => void;
+    onLogin: () => void;
 };
 
 function Login({ onLogin }: LoginProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
+    return (
+        <Terminal>
+            <div className="login">
+                <div className="ascii-title">
+                    JOURNAL ARCHIVE SYSTEM
+                </div>
 
-    onLogin();
-  };
+                <div className="terminal-line">
+                    SYSTEM STATUS: <span>ONLINE</span>
+                </div>
 
-  return (
-    <Terminal>
-      <div className="login">
-        <div className="ascii-title">
-          JOURNAL ARCHIVE SYSTEM
-        </div>
+                <div className="terminal-line">
+                    AUTHENTICATION REQUIRED
+                </div>
 
-        <div className="terminal-line">
-          SYSTEM STATUS: <span>ONLINE</span>
-        </div>
+                <br />
 
-        <div className="terminal-line">
-          AUTHENTICATION REQUIRED
-        </div>
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        onLogin();
+                    }}>
+                    <label>
+                        USERNAME:
+                        <input
+                            autoFocus
+                            value={username}
+                            onChange={(event) => setUsername(event.target.value)}
+                        />
+                    </label>
 
-        <br />
+                    <label>
+                        PASSWORD:
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                    </label>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            USERNAME:
-            <input
-              autoFocus
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </label>
-
-          <label>
-            PASSWORD:
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-
-          <button type="submit">
-            [ AUTHENTICATE ]
-          </button>
-        </form>
-      </div>
-    </Terminal>
-  );
+                    <button type="submit">
+                        [ AUTHENTICATE ]
+                    </button>
+                </form>
+            </div>
+        </Terminal>
+    );
 }
 
 export default Login;
