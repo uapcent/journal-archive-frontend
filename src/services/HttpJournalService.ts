@@ -11,8 +11,9 @@ export class HttpJournalService implements JournalService {
     }
 
     async getEntry(date: string): Promise<JournalEntry | null> {
+        console.log(`Fetching journal entry for date: ${date} from ${this.baseUrl}/system/v1/notes/${date}`);
         const response = await fetch(
-            `${this.baseUrl}/entries/${date}`,
+            `${this.baseUrl}/system/v1/notes/${date}`,
         );
 
         if (response.status === 404) {
