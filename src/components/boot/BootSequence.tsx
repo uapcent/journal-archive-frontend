@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Terminal from "../Terminal";
 import BootLine from "./BootLine";
 import { useBootSequence } from "./useBootSequence";
@@ -15,22 +15,33 @@ function BootSequence({ onComplete }: BootSequenceProps) {
     handleMessageComplete,
   } = useBootSequence();
 
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    // Detect touch capability once on mount
+    setIsTouchDevice(
+      "ontouchstart" in window || navigator.maxTouchPoints > 0
+    );
+  }, []);
+
   useEffect(() => {
     if (!isBootComplete) {
       return;
     }
 
+    const trigger = () => {
+      setTimeout(() => {
+        onComplete();
+      }, 0);
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Enter") {
         return;
       }
-
       event.preventDefault();
       event.stopPropagation();
-
-      setTimeout(() => {
-        onComplete();
-      }, 0);
+      trigger();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -39,6 +50,13 @@ function BootSequence({ onComplete }: BootSequenceProps) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isBootComplete, onComplete]);
+
+  const handlePromptActivate = () => {
+    if (!isBootComplete) return;
+    setTimeout(() => {
+      onComplete();
+    }, 0);
+  };
 
   return (
     <Terminal>
@@ -69,8 +87,20 @@ function BootSequence({ onComplete }: BootSequenceProps) {
         )}
 
         {isBootComplete && (
-          <div className="boot-prompt">
-            <span>PRESS ENTER TO CONTINUE</span>
+          <div
+            className="boot-prompt"
+            role="button"
+            tabIndex={0}
+            onClick={handlePromptActivate}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                handlePromptActivate();
+              }
+            }}
+          >
+            <span>
+              {isTouchDevice ? "TAP TO CONTINUE" : "PRESS ENTER TO CONTINUE"}
+            </span>
             <span className="cursor">_</span>
           </div>
         )}
