@@ -99,7 +99,7 @@ function BootSequence({ onComplete }: BootSequenceProps) {
             }}
           >
             <span>
-              {isTouchDevice ? "TAP TO CONTINUE" : "PRESS ENTER TO CONTINUE"}
+              {"PRESS ENTER TO CONTINUE"}
             </span>
             <span className="cursor">_</span>
           </div>
