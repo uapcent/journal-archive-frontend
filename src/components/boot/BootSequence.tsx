@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
 import Terminal from "../Terminal";
 import BootLine from "./BootLine";
 import { useBootSequence } from "./useBootSequence";
@@ -14,15 +15,6 @@ function BootSequence({ onComplete }: BootSequenceProps) {
     isBootComplete,
     handleMessageComplete,
   } = useBootSequence();
-
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-  useEffect(() => {
-    // Detect touch capability once on mount
-    setIsTouchDevice(
-      "ontouchstart" in window || navigator.maxTouchPoints > 0
-    );
-  }, []);
 
   useEffect(() => {
     if (!isBootComplete) {
@@ -70,8 +62,9 @@ function BootSequence({ onComplete }: BootSequenceProps) {
 
             {message.result && (
               <span
-                className={`boot-result boot-line-${message.resultType ?? message.type
-                  }`}
+                className={`boot-result boot-line-${
+                  message.resultType ?? message.type
+                }`}
               >
                 {message.result}
               </span>
@@ -98,9 +91,7 @@ function BootSequence({ onComplete }: BootSequenceProps) {
               }
             }}
           >
-            <span>
-              {"PRESS ENTER TO CONTINUE"}
-            </span>
+            <span>{"PRESS ENTER TO CONTINUE"}</span>
             <span className="cursor">_</span>
           </div>
         )}
